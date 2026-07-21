@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClubTime - Create Club</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="form-page">
+  <main class="page-card">
+    <div class="page-heading">
+      <div>
+        <a class="brand" href="index.html">ClubTime!</a>
+        <h1>Create club</h1>
+      </div>
+      <a class="secondary-button" href="index.html">Back to dashboard</a>
+    </div>
+
+    <form id="createClubForm" class="form-stack">
+      <label>
+        Club name
+        <input id="newClubName" type="text" required>
+      </label>
+
+      <label>
+        Description
+        <textarea id="newClubDescription" rows="5" placeholder="What is this club about?"></textarea>
+      </label>
+
+      <button class="primary-button" type="submit">Create club</button>
+    </form>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClubTime - Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page">
+  <main class="auth-card">
+    <a class="brand" href="login.html">ClubTime!</a>
+    <h1>Login</h1>
+
+    <form id="loginForm" class="form-stack">
+      <label>
+        Username
+        <input id="loginUsername" type="text" required autocomplete="username">
+      </label>
+
+      <label>
+        Password
+        <input id="loginPassword" type="password" required autocomplete="current-password">
+      </label>
+
+      <button class="primary-button" type="submit">Sign in</button>
+    </form>
+
+    <p class="form-switch">
+      New to ClubTime? <a href="signup.html">Create an account</a>
+    </p>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

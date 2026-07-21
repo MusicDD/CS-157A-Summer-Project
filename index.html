@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClubTime - Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="dashboard-page">
+  <div class="app-container">
+
+    <aside class="clubs-sidebar">
+      <div class="sidebar-top">
+        <a class="sidebar-brand" href="index.html">ClubTime!</a>
+        
+      </div>
+
+      <div class="club-list">
+        <button class="club-button active" data-club="Coding Club">Coding Club</button>
+        <button class="club-button" data-club="Art Club">Art Club</button>
+        <button class="club-button" data-club="Photography Club">Photography Club</button>
+        <button class="club-button" data-club="Book Club">Book Club</button>
+        <button class="club-button" data-club="Music Club">Music Club</button>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="club-header">
+        <div>
+          <p class="small-heading">Club</p>
+          <h1 id="clubName">Coding Club</h1>
+        </div>
+
+        <div class="header-buttons">
+          <button id="joinButton" class="primary-button" type="button">Join Club</button>
+          <a class="secondary-button" href="create-club.html">Create Club</a>
+          <button id="addUsersButton" class="secondary-button" type="button">Add Users</button>
+          <a class="secondary-button" href="settings.html">Settings</a>
+          <a class="danger-button" href="login.html">Log out</a>
+        </div>
+      </header>
+
+      <section class="feed-section">
+        <div class="feed-heading">
+          <div>
+            <h2>Announcements &amp; Polls</h2>
+            <p>Scroll inside this section to see older posts.</p>
+          </div>
+          <button id="addPostButton" class="secondary-button" type="button">+ Add Post</button>
+        </div>
+
+        <div id="announcementContainer" class="announcement-container">
+          <article class="post-card announcement-card">
+            <span class="post-label announcement-label">Announcement</span>
+            <h3>Welcome to Coding Club</h3>
+            <p>Our first meeting is Friday at 4:00 PM in the Student Union.</p>
+            <p class="post-date">Posted July 18</p>
+          </article>
+
+          <article class="post-card poll-card">
+            <span class="post-label poll-label">Poll</span>
+            <h3>What should our next workshop cover?</h3>
+            <label class="poll-option"><input type="radio" name="workshopPoll" value="Web Development"> Web Development</label>
+            <label class="poll-option"><input type="radio" name="workshopPoll" value="Mobile Apps"> Mobile App Development</label>
+            <label class="poll-option"><input type="radio" name="workshopPoll" value="Artificial Intelligence"> Artificial Intelligence</label>
+            <button class="vote-button" type="button">Submit Vote</button>
+          </article>
+
+          <article class="post-card announcement-card">
+            <span class="post-label announcement-label">Announcement</span>
+            <h3>Officer Applications Are Open</h3>
+            <p>Applications for club officer positions are due July 25.</p>
+            <p class="post-date">Posted July 16</p>
+          </article>
+
+          <article class="post-card poll-card">
+            <span class="post-label poll-label">Poll</span>
+            <h3>Which meeting day works best?</h3>
+            <label class="poll-option"><input type="radio" name="meetingPoll" value="Monday"> Monday</label>
+            <label class="poll-option"><input type="radio" name="meetingPoll" value="Wednesday"> Wednesday</label>
+            <label class="poll-option"><input type="radio" name="meetingPoll" value="Friday"> Friday</label>
+            <button class="vote-button" type="button">Submit Vote</button>
+          </article>
+
+          <article class="post-card announcement-card">
+            <span class="post-label announcement-label">Announcement</span>
+            <h3>Project Teams</h3>
+            <p>Bring one project idea to the next meeting so we can create teams.</p>
+            <p class="post-date">Posted July 14</p>
+          </article>
+
+          <article class="post-card poll-card">
+            <span class="post-label poll-label">Poll</span>
+            <h3>What food should we order?</h3>
+            <label class="poll-option"><input type="radio" name="foodPoll" value="Pizza"> Pizza</label>
+            <label class="poll-option"><input type="radio" name="foodPoll" value="Tacos"> Tacos</label>
+            <label class="poll-option"><input type="radio" name="foodPoll" value="Sandwiches"> Sandwiches</label>
+            <button class="vote-button" type="button">Submit Vote</button>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <aside class="users-sidebar">
+      <button id="usersButton" class="users-button" type="button">
+        <span>Users</span>
+        <span id="usersArrow">▼</span>
+      </button>
+
+      <div id="usersList" class="users-list">
+        <div class="user-card"><div class="user-avatar">AH</div><div><strong>Alex Hernandez</strong><p>Admin</p></div></div>
+        <div class="user-card"><div class="user-avatar">MS</div><div><strong>Maya Shah</strong><p>Social Media Manager</p></div></div>
+        <div class="user-card"><div class="user-avatar">HK</div><div><strong>Hetal Halani</strong><p>Event Coordinator</p></div></div>
+        <div class="user-card"><div class="user-avatar">JD</div><div><strong>Jordan Davis</strong><p>Chat Moderator</p></div></div>
+        <div class="user-card"><div class="user-avatar">SK</div><div><strong>Sarah Kim</strong><p>Member</p></div></div>
+      </div>
+    </aside>
+  </div>
+
+  <dialog id="addUsersDialog" class="modal">
+    <form id="addUsersForm" method="dialog" class="modal-content">
+      <div class="modal-heading">
+        <h2>Add User</h2>
+        <button class="icon-button" value="cancel" aria-label="Close">×</button>
+      </div>
+
+      <label>
+        User name
+        <input id="newUserName" type="text" required>
+      </label>
+
+      <label>
+        Role
+        <select id="newUserRole">
+          <option>Member</option>
+          <option>Admin</option>
+          <option>Social Media Manager</option>
+          <option>Event Coordinator</option>
+          <option>Chat Moderator</option>
+        </select>
+      </label>
+
+      <button class="primary-button" type="submit">Add user</button>
+    </form>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>

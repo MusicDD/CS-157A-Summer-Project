@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ClubTime - Settings</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="form-page">
+  <main class="page-card">
+    <div class="page-heading">
+      <div>
+        <a class="brand" href="index.html">ClubTime!</a>
+        <h1>Settings</h1>
+      </div>
+      <a class="secondary-button" href="index.html">Back to dashboard</a>
+    </div>
+
+    <form id="settingsForm" class="form-stack">
+      <label>
+        Name
+        <input id="settingsName" type="text" value="Hetal Kumar" required>
+      </label>
+
+      <label>
+        My club
+        <select id="settingsClub">
+          <option>Coding Club</option>
+          <option>Art Club</option>
+          <option>Photography Club</option>
+          <option>Book Club</option>
+          <option>Music Club</option>
+        </select>
+      </label>
+
+      <label>
+        Role
+        <select id="settingsRole">
+          <option>Member</option>
+          <option>Admin</option>
+          <option>Social Media Manager</option>
+          <option>Event Coordinator</option>
+          <option>Chat Moderator</option>
+        </select>
+      </label>
+
+      <button class="primary-button" type="submit">Save settings</button>
+    </form>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
