@@ -1,3 +1,7 @@
+// Base URL of your Flask backend. Change this if you ever deploy it
+// somewhere other than your own computer.
+const API_BASE_URL = "http://localhost:5000";
+
 document.addEventListener("DOMContentLoaded", function () {
   const loginForm = document.getElementById("loginForm");
   const signupForm = document.getElementById("signupForm");
@@ -5,24 +9,85 @@ document.addEventListener("DOMContentLoaded", function () {
   const settingsForm = document.getElementById("settingsForm");
 
   if (loginForm) {
-    loginForm.addEventListener("submit", function (event) {
+    loginForm.addEventListener("submit", async function (event) {
       event.preventDefault();
-      window.location.href = "index.html";
+
+      const username = document.getElementById("loginUsername").value.trim();
+      const password = document.getElementById("loginPassword").value;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          // response.ok is false for 4xx/5xx statuses, e.g. wrong password
+          alert(data.error || "Login failed. Please try again.");
+          return;
+        }
+
+        // Save the logged-in user's info so other pages (like settings.html)
+        // can use it. We keep this in localStorage just for convenience of
+        // remembering who's logged in on this browser -- the *source of truth*
+        // for the account itself is now the MySQL database, not localStorage.
+        localStorage.setItem("clubtimeUser", JSON.stringify(data.user));
+
+        window.location.href = "index.html";
+      } catch (error) {
+        // This branch runs if the fetch itself failed, e.g. the Flask
+        // server isn't running or CORS is blocking it.
+        console.error("Login request failed:", error);
+        alert("Could not reach the server. Is the Flask backend running on port 5000?");
+      }
     });
   }
 
   if (signupForm) {
-    signupForm.addEventListener("submit", function (event) {
+    signupForm.addEventListener("submit", async function (event) {
       event.preventDefault();
 
-      const name = document.getElementById("signupName").value.trim();
+      const fullName = document.getElementById("signupName").value.trim();
       const username = document.getElementById("signupUsername").value.trim();
+      const password = document.getElementById("signupPassword").value;
 
-      localStorage.setItem("clubtimeName", name);
-      localStorage.setItem("clubtimeUsername", username);
+      // signup.html only has one "Name" field, but the users table stores
+      // first_name and last_name separately. Split on the first space so
+      // "Hetal Kumar" becomes firstName "Hetal", lastName "Kumar".
+      // If there's no space (just one word), lastName is left blank.
+      const spaceIndex = fullName.indexOf(" ");
+      const firstName = spaceIndex === -1 ? fullName : fullName.slice(0, spaceIndex);
+      const lastName = spaceIndex === -1 ? "" : fullName.slice(spaceIndex + 1);
 
-      alert("Account created. This demo stores only basic information in your browser.");
-      window.location.href = "index.html";
+      // signup.html doesn't currently have an email field, but the backend
+      // requires one (and needs it to be unique). We generate a placeholder
+      // from the username for now -- swap this out once you add a real
+      // email input to signup.html.
+      const email = `${username}@placeholder.clubtime`;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/signup`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ firstName, lastName, username, email, password }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          alert(data.error || "Signup failed. Please try again.");
+          return;
+        }
+
+        alert("Account created! You can now log in.");
+        window.location.href = "login.html";
+      } catch (error) {
+        console.error("Signup request failed:", error);
+        alert("Could not reach the server. Is the Flask backend running on port 5000?");
+      }
     });
   }
 
