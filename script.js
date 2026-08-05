@@ -1,5 +1,3 @@
-// Base URL of your Flask backend. Change this if you ever deploy it
-// somewhere other than your own computer.
 const API_BASE_URL = "http://localhost:5000";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -52,27 +50,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const fullName = document.getElementById("signupName").value.trim();
       const username = document.getElementById("signupUsername").value.trim();
+      const dob = document.getElementById("signupDob").value; // "YYYY-MM-DD" from <input type="date">
       const password = document.getElementById("signupPassword").value;
 
       // signup.html only has one "Name" field, but the users table stores
-      // first_name and last_name separately. Split on the first space so
-      // "Hetal Kumar" becomes firstName "Hetal", lastName "Kumar".
+      // firstName and lastName separately. Split on the first space so
+      // "Larry Test" becomes firstName "Larry", lastName "Test".
       // If there's no space (just one word), lastName is left blank.
       const spaceIndex = fullName.indexOf(" ");
       const firstName = spaceIndex === -1 ? fullName : fullName.slice(0, spaceIndex);
       const lastName = spaceIndex === -1 ? "" : fullName.slice(spaceIndex + 1);
 
-      // signup.html doesn't currently have an email field, but the backend
-      // requires one (and needs it to be unique). We generate a placeholder
-      // from the username for now -- swap this out once you add a real
-      // email input to signup.html.
-      const email = `${username}@placeholder.clubtime`;
-
       try {
         const response = await fetch(`${API_BASE_URL}/api/signup`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ firstName, lastName, username, email, password }),
+          body: JSON.stringify({ firstName, lastName, username, dob, password }),
         });
 
         const data = await response.json();
