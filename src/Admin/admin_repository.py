@@ -45,9 +45,7 @@ def get_admin_by_email(email):
     return admin
 
 
-# -----------------------------------------------------------------
 # Banning users (Admin -> User relationship)
-# -----------------------------------------------------------------
 def ban_user(user_id, admin_id):
     connection = get_connection()
     cursor = connection.cursor()

@@ -16,11 +16,23 @@ def get_user_age(dob):
         years -= 1
     return years
 
+
 # CREATE
-def create_user(first_name, last_name, username, dob, password, emails=None, phones=None):
+def create_user(first_name, last_name, username, dob, password,
+                 emails=None, phones=None):
+    """
+    Creates a User, plus any emails/phones passed in.
+    emails/phones are optional lists of strings, e.g. emails=["a@x.com"].
+    Returns the new user_id.
+    """
     connection = get_connection()
     cursor = connection.cursor()
+
     cursor.execute(
+        """
+        INSERT INTO User (firstName, lastName, username, DoB, joinDate, passwordHash)
+        VALUES (%s, %s, %s, %s, CURDATE(), %s)
+        """,
         (first_name, last_name, username, dob, hash_password(password)),
     )
     user_id = cursor.lastrowid
@@ -80,6 +92,7 @@ def get_user_phones(user_id):
 
 
 def _attach_extras(user):
+    """Adds computed age + email/phone lists onto a user dict."""
     if user is None:
         return None
     user["age"] = get_user_age(user.get("DoB"))
@@ -117,7 +130,10 @@ def get_all_users():
     connection.close()
     return [_attach_extras(u) for u in users]
 
+
+# -----------------------------------------------------------------
 # LOGIN
+# -----------------------------------------------------------------
 def authenticate_user(username, password):
     user = get_user_by_username(username)
     if user is None:
@@ -126,7 +142,10 @@ def authenticate_user(username, password):
         return user
     return None
 
+
+# -----------------------------------------------------------------
 # UPDATE / DELETE
+# -----------------------------------------------------------------
 def update_user(user_id, **fields):
     fields.pop("age", None)
     fields.pop("emails", None)
