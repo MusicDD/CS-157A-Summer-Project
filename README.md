@@ -13,3 +13,7 @@ and then run thefile and it should be good to go
 
 **Note:
 you will need to create a .gitignore with a .env file and put your information for your DB. 
+
+Ara - ER Diagram, SQL Schema
+Hetal - Front end, html files
+Dominic - Created python backend for User, Events, Social, Club, and Broadcast
