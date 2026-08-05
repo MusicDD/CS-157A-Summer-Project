@@ -1,13 +1,10 @@
-
--- ClubTime Database Schema
--- CS157A Final Project
-
- 
 DROP DATABASE IF EXISTS clubtime;
 CREATE DATABASE clubtime;
 USE clubtime;
-
-
+ 
+-- ---------------------------------------------------------
+-- Admin
+-- ---------------------------------------------------------
 CREATE TABLE Admin (
     adminId     INT AUTO_INCREMENT PRIMARY KEY,
     firstName   VARCHAR(50)  NOT NULL,
@@ -15,18 +12,21 @@ CREATE TABLE Admin (
     email       VARCHAR(100) NOT NULL UNIQUE
 );
  
+-- Clubs
 CREATE TABLE Clubs (
-    clubId          INT AUTO_INCREMENT PRIMARY KEY,
-    clubName        VARCHAR(100) NOT NULL,
-    clubStatus      ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
-    clubFocus       VARCHAR(100),
+    clubId           INT AUTO_INCREMENT PRIMARY KEY,
+    clubName         VARCHAR(100) NOT NULL,
+    clubStatus       ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
+    clubFocus        VARCHAR(100),
     lastActivityDate DATE
 );
-
+ 
+-- User (username column added here, per request)
 CREATE TABLE User (
     userId          INT AUTO_INCREMENT PRIMARY KEY,
     firstName       VARCHAR(50)  NOT NULL,
     lastName        VARCHAR(50)  NOT NULL,
+    username        VARCHAR(50)  NOT NULL UNIQUE,   -- added: used for login instead of email
     DoB             DATE         NOT NULL,
     joinDate        DATE         NOT NULL,
     passwordHash    VARCHAR(255) NOT NULL,
@@ -35,7 +35,6 @@ CREATE TABLE User (
         ON DELETE SET NULL
 );
  
-
 CREATE TABLE UserEmail (
     userId  INT NOT NULL,
     email   VARCHAR(100) NOT NULL,
@@ -51,9 +50,8 @@ CREATE TABLE UserPhone (
     FOREIGN KEY (userId) REFERENCES User(userId)
         ON DELETE CASCADE
 );
- 
 
- 
+-- Club_Manager (ISA subtype of User) + its own subtypes
 CREATE TABLE Club_Manager (
     userId      INT NOT NULL PRIMARY KEY,
     startDate   DATE NOT NULL,
@@ -79,13 +77,13 @@ CREATE TABLE ChatModerator (
         ON DELETE CASCADE
 );
  
- 
+-- Club formation requests (a User asks to start a Club)
 CREATE TABLE ClubFormationRequest (
     requestId               INT AUTO_INCREMENT PRIMARY KEY,
     userId                  INT NOT NULL,
     reviewedByAdminId       INT NULL,
     proposedClubName        VARCHAR(100) NOT NULL,
-    club_Intention          VARCHAR(255),
+    club_Intention           VARCHAR(255),
     proposedClubActivities  VARCHAR(255),
     status                  ENUM('pending', 'approved', 'denied') NOT NULL DEFAULT 'pending',
     requestDate             DATE NOT NULL,
@@ -94,8 +92,8 @@ CREATE TABLE ClubFormationRequest (
     FOREIGN KEY (reviewedByAdminId) REFERENCES Admin(adminId)
         ON DELETE SET NULL
 );
-
  
+-- Junction tables (many-to-many relationships)
 CREATE TABLE ClubManagement (
     clubId  INT NOT NULL,
     userId  INT NOT NULL,
@@ -126,8 +124,10 @@ CREATE TABLE AdminManagesClub (
     FOREIGN KEY (clubId) REFERENCES Clubs(clubId)
         ON DELETE CASCADE
 );
-
-
+ 
+-- ---------------------------------------------------------
+-- Broadcast (ISA parent) + EventUpdate / Poll / Announcement (subtypes)
+-- ---------------------------------------------------------
 CREATE TABLE Broadcast (
     broadcastId         INT AUTO_INCREMENT PRIMARY KEY,
     broadcastTimestamp  DATETIME NOT NULL,
@@ -147,9 +147,9 @@ CREATE TABLE BroadcastAuthors (
 );
  
 CREATE TABLE EventUpdate (
-    broadcastId     INT NOT NULL PRIMARY KEY,
-    eventDate       DATE,
-    eventLocation   VARCHAR(100),
+    broadcastId      INT NOT NULL PRIMARY KEY,
+    eventDate        DATE,
+    eventLocation    VARCHAR(100),
     eventDescription VARCHAR(255),
     FOREIGN KEY (broadcastId) REFERENCES Broadcast(broadcastId)
         ON DELETE CASCADE
@@ -170,8 +170,7 @@ CREATE TABLE Announcement (
         ON DELETE CASCADE
 );
  
-
- 
+-- Notification
 CREATE TABLE Notification (
     notificationId  INT AUTO_INCREMENT PRIMARY KEY,
     content         VARCHAR(255) NOT NULL,
@@ -185,7 +184,7 @@ CREATE TABLE Notification (
         ON DELETE CASCADE
 );
  
- 
+-- PostThread + Interaction
 CREATE TABLE PostThread (
     postId          INT AUTO_INCREMENT PRIMARY KEY,
     content         VARCHAR(500) NOT NULL,
@@ -195,15 +194,14 @@ CREATE TABLE PostThread (
         ON DELETE CASCADE
 );
  
-
 CREATE TABLE Interaction (
     interactionId       INT AUTO_INCREMENT PRIMARY KEY,
     interactionType     ENUM('like', 'comment', 'share', 'tag') NOT NULL,
-    content             VARCHAR(255),
-    timestamp           DATETIME NOT NULL,
-    initiatorUserId     INT NOT NULL,
-    targetPostId        INT NULL,
-    recipientUserId     INT NULL,
+    content              VARCHAR(255),
+    timestamp            DATETIME NOT NULL,
+    initiatorUserId      INT NOT NULL,
+    targetPostId         INT NULL,
+    recipientUserId      INT NULL,
     FOREIGN KEY (initiatorUserId) REFERENCES User(userId)
         ON DELETE CASCADE,
     FOREIGN KEY (targetPostId) REFERENCES PostThread(postId)
@@ -215,4 +213,3 @@ CREATE TABLE Interaction (
         OR (targetPostId IS NULL AND recipientUserId IS NOT NULL)
     )
 );
- 
